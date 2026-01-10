@@ -41,3 +41,6 @@ ENV/
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Docs
+*.Identifier
