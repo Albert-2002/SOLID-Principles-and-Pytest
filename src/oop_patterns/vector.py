@@ -8,11 +8,19 @@ class Vector:
 
     def __init__(self, components: List[float]):
         self._components = tuple(components)
+        self._magnitude = None
 
     @property
     def components(self) -> Tuple[float, ...]:
         """Get the components of the vector as a tuple."""
         return self._components
+
+    @property
+    def magnitude(self) -> float:
+        """Compute and return the magnitude of the vector."""
+        if self._magnitude is None:
+            self._magnitude = sum(a**2 for a in self._components) ** 0.5
+        return self._magnitude
 
     def __add__(self, other: "Vector") -> "Vector":
         if not isinstance(other, Vector):
@@ -38,10 +46,6 @@ class Vector:
             )
         return sum(a * b for a, b in zip(self._components, other.components))
 
-    def magnitude(self) -> float:
-        """Compute the magnitude (length) of the vector."""
-        return sum(a**2 for a in self._components) ** 0.5
-
     def __repr__(self) -> str:
         return f"Vector({self._components})"
 
@@ -56,5 +60,5 @@ if __name__ == "__main__":
     print("v1 + v2:", v1 + v2)
     print("v1 - v2:", v1 - v2)
     print("v1 . v2:", v1.dot(v2))
-    print("|v1|:", v1.magnitude())
-    print("|v2|:", v2.magnitude())
+    print("|v1|:", v1.magnitude)
+    print("|v2|:", v2.magnitude)
