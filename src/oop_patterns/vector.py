@@ -7,6 +7,8 @@ class Vector:
     """A class to represent a N-dimensional vector."""
 
     def __init__(self, components: List[float]):
+        if not components:
+            raise ValueError("Vector must have at least one component.")
         self._components = tuple(components)
         self._magnitude = None
         self._unit_vector = None
@@ -61,7 +63,18 @@ class Vector:
         return f"Vector({self._components})"
 
     def __str__(self) -> str:
-        return f"({' ,'.join(map(str, self._components))})"
+        return f"({', '.join(map(str, self._components))})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Vector):
+            return NotImplemented
+        return self._components == other.components
+
+    def __hash__(self) -> int:
+        return hash(self._components)
+
+    def __len__(self) -> int:
+        return len(self._components)
 
 
 # Example usage:
