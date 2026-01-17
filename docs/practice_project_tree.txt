@@ -1,0 +1,217 @@
+task_management_system/
+│
+├── main.py
+├── README.md
+├── pyproject.toml / setup.cfg
+├── requirements.txt
+│
+├── config/
+│   ├── __init__.py
+│   ├── application_config.py
+│   ├── tenant_config.py
+│   ├── plugin_config.py
+│   └── cache_config.py
+│
+├── exceptions/
+│   ├── __init__.py
+│   ├── base_exception.py
+│   ├── validation_exceptions.py
+│   ├── permission_exceptions.py
+│   ├── workflow_exceptions.py
+│   ├── plugin_exceptions.py
+│   └── infrastructure_exceptions.py
+│
+├── models/
+│   ├── __init__.py
+│   ├── base/
+│   │   ├── entity.py
+│   │   ├── aggregate_root.py
+│   │   └── value_object.py
+│   │
+│   ├── tenant/
+│   │   ├── organization.py
+│   │   ├── tenant_settings.py
+│   │   └── branding.py
+│   │
+│   ├── user/
+│   │   ├── user.py
+│   │   ├── role.py
+│   │   ├── permission.py
+│   │   ├── team.py
+│   │   └── audit_log.py
+│   │
+│   ├── task/
+│   │   ├── task.py
+│   │   ├── task_state.py
+│   │   ├── task_priority.py
+│   │   ├── task_dependency.py
+│   │   ├── task_comment.py
+│   │   ├── task_attachment.py
+│   │   └── custom_field.py
+│   │
+│   └── notification/
+│       ├── notification.py
+│       ├── notification_template.py
+│       └── notification_preferences.py
+│
+├── repositories/
+│   ├── __init__.py
+│   ├── base_repository.py
+│   │
+│   ├── tenant_repository.py
+│   ├── user_repository.py
+│   ├── task_repository.py
+│   ├── notification_repository.py
+│   └── event_repository.py
+│
+├── services/
+│   ├── __init__.py
+│   ├── tenant_service.py
+│   ├── user_service.py
+│   ├── task_service.py
+│   ├── workflow_service.py
+│   ├── notification_service.py
+│   ├── plugin_service.py
+│   ├── search_service.py
+│   ├── analytics_service.py
+│   └── reporting_service.py
+│
+├── permissions/
+│   ├── __init__.py
+│   ├── permission_checker.py
+│   ├── permission_chain.py
+│   ├── role_hierarchy.py
+│   └── access_policy.py
+│
+├── workflows/
+│   ├── __init__.py
+│   ├── base_workflow.py
+│   ├── state_machine.py
+│   ├── workflow_rule.py
+│   ├── sla_tracker.py
+│   ├── escalation_policy.py
+│   └── workflow_registry.py
+│
+├── notifications/
+│   ├── __init__.py
+│   ├── channels/
+│   │   ├── email_channel.py
+│   │   ├── sms_channel.py
+│   │   ├── in_app_channel.py
+│   │   └── webhook_channel.py
+│   │
+│   ├── dispatcher.py
+│   ├── retry_policy.py
+│   └── digest_manager.py
+│
+├── plugins/
+│   ├── __init__.py
+│   ├── base_plugin.py
+│   ├── plugin_registry.py
+│   ├── plugin_loader.py
+│   ├── plugin_context.py
+│   ├── sandbox/
+│   │   └── execution_guard.py
+│   │
+│   └── built_in/
+│       ├── analytics_plugin/
+│       ├── custom_fields_plugin/
+│       └── webhook_plugin/
+│
+├── events/
+│   ├── __init__.py
+│   ├── base_event.py
+│   ├── event_bus.py
+│   ├── event_store.py
+│   ├── event_replayer.py
+│   └── projections/
+│       ├── task_projection.py
+│       └── audit_projection.py
+│
+├── cache/
+│   ├── __init__.py
+│   ├── cache_provider.py
+│   ├── in_memory_cache.py
+│   ├── distributed_cache.py
+│   ├── cache_key_builder.py
+│   └── cache_monitor.py
+│
+├── search/
+│   ├── __init__.py
+│   ├── indexer.py
+│   ├── query_builder.py
+│   ├── search_engine.py
+│   ├── ranking_strategy.py
+│   └── faceted_search.py
+│
+├── analytics/
+│   ├── __init__.py
+│   ├── metrics_collector.py
+│   ├── trend_analyzer.py
+│   ├── workload_analyzer.py
+│   └── dashboard_builder.py
+│
+├── utils/
+│   ├── __init__.py
+│   ├── clock.py
+│   ├── id_generator.py
+│   ├── validators.py
+│   ├── decorators.py
+│   └── transaction_manager.py
+│
+└── tests/
+    ├── conftest.py
+    │
+    ├── unit/
+    │   ├── models/
+    │   ├── services/
+    │   ├── workflows/
+    │   ├── permissions/
+    │   ├── plugins/
+    │   ├── notifications/
+    │   └── utils/
+    │
+    ├── integration/
+    │   ├── task_lifecycle/
+    │   ├── workflow_execution/
+    │   ├── plugin_system/
+    │   ├── notification_delivery/
+    │   ├── event_sourcing/
+    │   └── search_engine/
+    │
+    ├── performance/
+    │   ├── cache_performance_tests.py
+    │   └── workflow_stress_tests.py
+    │
+    └── fixtures/
+        ├── tenants.py
+        ├── users.py
+        ├── tasks.py
+        ├── workflows.py
+        ├── plugins.py
+        └── time_based.py
+
+-------------------------------------------------------------------------------------------------------------
+
+models → services → orchestration (main.py)
+       ↑
+repositories / workflows / permissions
+
+-------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------
+| Pattern                 | Where it lives           |
+| ----------------------- | ------------------------ |
+| Factory                 | services / plugins       |
+| Strategy                | notifications, workflows |
+| Observer                | events                   |
+| State                   | workflows / task_state   |
+| Composite               | task hierarchy           |
+| Decorator               | utils / plugins          |
+| Command                 | services / events        |
+| Chain of Responsibility | permissions              |
+| Builder                 | search / analytics       |
+| Facade                  | services                 |
+------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------
